@@ -215,8 +215,6 @@ namespace PasswordTextBoxControl
             }
             else
             {
-                Debug.Assert(!ReferenceEquals(timer, null));
-
                 timer?.Dispose();
                 timer = null;
             }
