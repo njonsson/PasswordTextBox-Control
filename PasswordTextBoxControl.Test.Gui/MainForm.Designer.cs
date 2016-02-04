@@ -68,12 +68,16 @@
             // 
             // PasswordTextBox
             // 
+            this.PasswordTextBox.AllowDrop = true;
             this.PasswordTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PasswordTextBox.Location = new System.Drawing.Point(16, 32);
             this.PasswordTextBox.Name = "PasswordTextBox";
             this.PasswordTextBox.Size = new System.Drawing.Size(190, 21);
             this.PasswordTextBox.TabIndex = 1;
             this.PasswordTextBox.TextChanged += new System.EventHandler(this.PasswordTextBox_TextChanged);
+            this.PasswordTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.TextBoxControl_DragDrop);
+            this.PasswordTextBox.DragOver += new System.Windows.Forms.DragEventHandler(this.TextBoxControl_DragOver);
+            this.PasswordTextBox.QueryContinueDrag += new System.Windows.Forms.QueryContinueDragEventHandler(this.TextBoxControl_QueryContinueDrag);
             // 
             // UseSystemPasswordCharPropertyCheckbox
             // 
@@ -89,6 +93,7 @@
             // 
             // PasswordCharPropertyTextBox
             // 
+            this.PasswordCharPropertyTextBox.AllowDrop = true;
             this.PasswordCharPropertyTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PasswordCharPropertyTextBox.Location = new System.Drawing.Point(16, 24);
             this.PasswordCharPropertyTextBox.MaxLength = 1;
@@ -96,6 +101,9 @@
             this.PasswordCharPropertyTextBox.Size = new System.Drawing.Size(152, 21);
             this.PasswordCharPropertyTextBox.TabIndex = 1;
             this.PasswordCharPropertyTextBox.TextChanged += new System.EventHandler(this.PasswordCharPropertyTextBox_TextChanged);
+            this.PasswordCharPropertyTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.TextBoxControl_DragDrop);
+            this.PasswordCharPropertyTextBox.DragOver += new System.Windows.Forms.DragEventHandler(this.TextBoxControl_DragOver);
+            this.PasswordCharPropertyTextBox.QueryContinueDrag += new System.Windows.Forms.QueryContinueDragEventHandler(this.TextBoxControl_QueryContinueDrag);
             // 
             // TextPropertyLabel
             // 
@@ -109,12 +117,16 @@
             // 
             // TextPropertyTextBox
             // 
+            this.TextPropertyTextBox.AllowDrop = true;
             this.TextPropertyTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TextPropertyTextBox.Location = new System.Drawing.Point(16, 20);
             this.TextPropertyTextBox.Name = "TextPropertyTextBox";
             this.TextPropertyTextBox.Size = new System.Drawing.Size(152, 21);
             this.TextPropertyTextBox.TabIndex = 1;
             this.TextPropertyTextBox.TextChanged += new System.EventHandler(this.TextPropertyTextBox_TextChanged);
+            this.TextPropertyTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.TextBoxControl_DragDrop);
+            this.TextPropertyTextBox.DragOver += new System.Windows.Forms.DragEventHandler(this.TextBoxControl_DragOver);
+            this.TextPropertyTextBox.QueryContinueDrag += new System.Windows.Forms.QueryContinueDragEventHandler(this.TextBoxControl_QueryContinueDrag);
             // 
             // PasswordCharPropertyLabel
             // 
@@ -128,12 +140,16 @@
             // 
             // PasswordCharDelayPropertyTextBox
             // 
+            this.PasswordCharDelayPropertyTextBox.AllowDrop = true;
             this.PasswordCharDelayPropertyTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PasswordCharDelayPropertyTextBox.Location = new System.Drawing.Point(16, 24);
             this.PasswordCharDelayPropertyTextBox.Name = "PasswordCharDelayPropertyTextBox";
             this.PasswordCharDelayPropertyTextBox.Size = new System.Drawing.Size(152, 21);
             this.PasswordCharDelayPropertyTextBox.TabIndex = 1;
             this.PasswordCharDelayPropertyTextBox.TextChanged += new System.EventHandler(this.PasswordCharDelayPropertyTextBox_TextChanged);
+            this.PasswordCharDelayPropertyTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.TextBoxControl_DragDrop);
+            this.PasswordCharDelayPropertyTextBox.DragOver += new System.Windows.Forms.DragEventHandler(this.TextBoxControl_DragOver);
+            this.PasswordCharDelayPropertyTextBox.QueryContinueDrag += new System.Windows.Forms.QueryContinueDragEventHandler(this.TextBoxControl_QueryContinueDrag);
             this.PasswordCharDelayPropertyTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.PasswordCharDelayPropertyTextBox_Validating);
             // 
             // PasswordCharDelayPropertyLabel
