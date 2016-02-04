@@ -12,15 +12,21 @@ namespace PasswordTextBoxControl
     public class PasswordTextBox : TextBox
     {
         /// <summary>
+        /// The default value of <see cref="PasswordChar"/>.
+        /// </summary>
+        public const char DefaultPasswordChar = '\0';
+
+        /// <summary>
         /// The default value of <see cref="PasswordCharDelay"/>.
         /// </summary>
-        public const int  DefaultPasswordCharDelay     = 1000;
+        public const int DefaultPasswordCharDelay = 1000;
 
         /// <summary>
         /// The default value of <see cref="UseSystemPasswordChar"/>.
         /// </summary>
         public const bool DefaultUseSystemPasswordChar = true;
 
+        private char                passwordChar;
         private int                 passwordCharDelay;
         private string              textPrevious;
         private System.Timers.Timer timer;
@@ -30,16 +36,12 @@ namespace PasswordTextBoxControl
         /// </summary>
         public PasswordTextBox()
         {
+            passwordChar = DefaultPasswordChar;
             passwordCharDelay = DefaultPasswordCharDelay;
-            UseSystemPasswordChar = true;
+            UseSystemPasswordChar = DefaultUseSystemPasswordChar;
             SetUpTimer(true);
         }
 
-        /// <summary>
-        /// A value indicating whether this is a multiline <see cref="TextBox"/>
-        /// control.
-        /// </summary>
-        /// <returns><c>false</c></returns>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Multiline {
@@ -52,12 +54,19 @@ namespace PasswordTextBoxControl
         /// Gets or sets the character used to mask characters of a password in
         /// a <see cref="PasswordTextBox"/> control.
         /// </summary>
+        /// <returns>A <see cref="char"/>. Set the value of this property to
+        /// <c>'\0'</c> (character value) if you do not want the control to mask
+        /// characters as they are typed. Equals 0 (character value) by default.</returns>
+        [DefaultValue(DefaultPasswordChar)]
         [Description("Indicates the character to display for password input in a PasswordTextBox control.")]
         public new char PasswordChar
         {
-            get { return base.PasswordChar; }
+            get
+            {
+                return UseSystemPasswordChar ? passwordChar : base.PasswordChar;
+            }
 
-            set { base.PasswordChar = value; }
+            set { base.PasswordChar = passwordChar = value; }
         }
 
         /// <summary>
@@ -125,13 +134,10 @@ namespace PasswordTextBoxControl
         /// values of <see cref="UseSystemPasswordChar"/> and
         /// <see cref="PasswordChar"/>.
         /// </summary>
-        /// <returns>A <see cref="char"/>, or <c>null</c> if no password
-        /// character is in effect.</returns>
-        protected char? EffectivePasswordChar()
+        /// <returns>A <see cref="char"/>.</returns>
+        protected char EffectivePasswordChar()
         {
-            if (UseSystemPasswordChar) return '•';
-
-            return (PasswordChar == '\0') ? (char?)null : PasswordChar;
+            return UseSystemPasswordChar ? base.PasswordChar : passwordChar;
         }
 
         protected override void OnTextChanged(EventArgs e)
@@ -173,7 +179,7 @@ namespace PasswordTextBoxControl
             // If we're not obscuring the text at all then there's no need
             // to paint unobscured text over it.
             var effectivePasswordChar = EffectivePasswordChar();
-            if (!effectivePasswordChar.HasValue) return;
+            if (effectivePasswordChar == '\0') return;
 
             if (string.IsNullOrEmpty(text)) return;
 
@@ -183,7 +189,7 @@ namespace PasswordTextBoxControl
                 {
                     using (var backBrush = new SolidBrush(BackColor))
                     {
-                        var obscuredNewText = new string(effectivePasswordChar.Value,
+                        var obscuredNewText = new string(effectivePasswordChar,
                                                          text.Length);
                         var sizeOfObscuredNewText = graphics.MeasureString(obscuredNewText,
                                                                            Font);
