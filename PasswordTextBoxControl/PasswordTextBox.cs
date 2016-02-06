@@ -5,6 +5,10 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Timers;
 using System.Windows.Forms;
+using PasswordTextBoxControl.Facades;
+using Graphics = PasswordTextBoxControl.Facades.Graphics;
+using SolidBrush = PasswordTextBoxControl.Facades.SolidBrush;
+using Timer = PasswordTextBoxControl.Facades.Timer;
 
 namespace PasswordTextBoxControl
 {
@@ -12,6 +16,18 @@ namespace PasswordTextBoxControl
     [Description("Enables the user to enter password input, momentarily showing each character entered.")]
     public class PasswordTextBox : TextBox
     {
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static Func<bool> IsFontSmoothingEnabled = () => SystemInformation.IsFontSmoothingEnabled;
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static Func<Control, IGraphics> NewGraphics = self => new Graphics(self);
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static Func<Color, ISolidBrush> NewSolidBrush = color => new SolidBrush(color);
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static Func<bool, double, ISynchronizeInvoke, ITimer> NewTimer = (autoReset, interval, synchronizingObject) => new Timer(autoReset, interval, synchronizingObject);
+
         /// <summary>
         /// The default value of <see cref="PasswordChar"/>.
         /// </summary>
@@ -27,28 +43,34 @@ namespace PasswordTextBoxControl
         /// </summary>
         public const bool DefaultUseSystemPasswordChar = true;
 
-        private char                passwordChar;
-        private int                 passwordCharDelay;
-        private string              textPrevious;
-        private System.Timers.Timer timer;
+        private char   passwordChar;
+        private int    passwordCharDelay;
+        private string textPrevious;
+        private ITimer timer;
 
         /// <summary>
         /// Instantiates a new <see cref="PasswordTextBox"/>.
         /// </summary>
         public PasswordTextBox()
         {
-            passwordChar = DefaultPasswordChar;
-            passwordCharDelay = DefaultPasswordCharDelay;
-            UseSystemPasswordChar = DefaultUseSystemPasswordChar;
+            passwordChar               = DefaultPasswordChar;
+            passwordCharDelay          = DefaultPasswordCharDelay;
+            base.UseSystemPasswordChar = DefaultUseSystemPasswordChar;
             SetUpTimer(true);
         }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Multiline {
-            get { return false; }
+            get { return base.Multiline; }
 
-            set { }
+            set
+            {
+                if (value)
+                {
+                    throw new ArgumentException($"{GetType().FullName} does not support Multiline.");
+                }
+            }
         }
 
         /// <summary>
@@ -62,18 +84,17 @@ namespace PasswordTextBoxControl
         [Description("Indicates the character to display for password input in a PasswordTextBox control.")]
         public new char PasswordChar
         {
-            get
-            {
-                return UseSystemPasswordChar ? passwordChar : base.PasswordChar;
-            }
+            get { return passwordChar; }
 
-            set { base.PasswordChar = passwordChar = value; }
+            set { passwordChar = base.PasswordChar = value; }
         }
 
         /// <summary>
         /// Gets or sets the time in milliseconds during which password input is
         /// legible before appearing as the password character.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Value is less than or
+        /// equal to zero.</exception>
         [Category("Behavior")]
         [DefaultValue(DefaultPasswordCharDelay)]
         [Description("Indicates the time in milliseconds during which password input is legible before appearing as the password character.")]
@@ -97,12 +118,29 @@ namespace PasswordTextBoxControl
                 {
                     t.Interval = value;
                 }
-                catch (ArgumentException e)
+                catch (ArgumentException)
                 {
-                    throw new ArgumentOutOfRangeException("Must be greater than zero.",
-                                                          e);
+                    throw new ArgumentOutOfRangeException(null,
+                                                          value,
+                                                          "Must be greater than zero.");
                 }
                 passwordCharDelay = value;
+            }
+        }
+
+        /// <summary>
+        /// Computes the password character actually in effect, based on the
+        /// values of <see cref="UseSystemPasswordChar"/> and
+        /// <see cref="PasswordChar"/>.
+        /// </summary>
+        /// <returns>A <see cref="char"/>.</returns>
+        [Browsable(false)]
+        public char PasswordCharEffective
+        {
+            get
+            {
+                // ReSharper disable once ConvertPropertyToExpressionBody
+                return UseSystemPasswordChar ? base.PasswordChar : passwordChar;
             }
         }
 
@@ -120,6 +158,11 @@ namespace PasswordTextBoxControl
             set { base.UseSystemPasswordChar = value; }
         }
 
+        /// <summary>
+        /// Disposes unmanaged resources and, optionally, managed resources.
+        /// </summary>
+        /// <param name="disposing">If <c>true</c>, managed resources will be
+        /// disposed.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -131,18 +174,19 @@ namespace PasswordTextBoxControl
         }
 
         /// <summary>
-        /// Computes the password character actually in effect, based on the
-        /// values of <see cref="UseSystemPasswordChar"/> and
-        /// <see cref="PasswordChar"/>.
+        /// Raises the <see cref="TextBox.TextChanged"/> event with the
+        /// specified <see cref="EventArgs"/>.
         /// </summary>
-        /// <returns>A <see cref="char"/>.</returns>
-        protected char EffectivePasswordChar()
-        {
-            return UseSystemPasswordChar ? base.PasswordChar : passwordChar;
-        }
-
+        /// <param name="e">An <see cref="EventArgs"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="e"/> is
+        /// <c>null</c>.</exception>>
         protected override void OnTextChanged(EventArgs e)
         {
+            if (ReferenceEquals(e, null))
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             timer?.Stop();
             timer?.Start();
 
@@ -160,15 +204,15 @@ namespace PasswordTextBoxControl
         }
 
         /// <summary>
-        /// Paints the specified <paramref name="text"/> at the specified
+        /// Paints the specified <paramref name="string"/> at the specified
         /// <paramref name="position"/>.
         /// </summary>
-        /// <param name="text">A <see cref="string"/>.</param>
+        /// <param name="string">A <see cref="string"/>.</param>
         /// <param name="position"></param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="position"/>
         /// is less than zero or not less than
         /// <see cref="PasswordTextBox.TextLength"/>.</exception>
-        protected void PaintUnobscured(string text, int position)
+        protected void PaintUnobscured(string @string, int position)
         {
             if ((position < 0) || (TextLength <= position))
             {
@@ -179,23 +223,22 @@ namespace PasswordTextBoxControl
 
             // If we're not obscuring the text at all then there's no need
             // to paint unobscured text over it.
-            var effectivePasswordChar = EffectivePasswordChar();
-            if (effectivePasswordChar == '\0') return;
+            if (PasswordCharEffective == '\0') return;
 
-            if (string.IsNullOrEmpty(text)) return;
+            if (string.IsNullOrEmpty(@string)) return;
 
-            using (var graphics = CreateGraphics())
+            using (var graphics = NewGraphics(this))
             {
-                if (SystemInformation.IsFontSmoothingEnabled)
+                if (IsFontSmoothingEnabled())
                 {
                     graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
                 }
-                using (var foreBrush = new SolidBrush(ForeColor))
+                using (var foreBrush = NewSolidBrush(ForeColor))
                 {
-                    using (var backBrush = new SolidBrush(BackColor))
+                    using (var backBrush = NewSolidBrush(BackColor))
                     {
-                        var obscuredNewText = new string(effectivePasswordChar,
-                                                         text.Length);
+                        var obscuredNewText = new string(PasswordCharEffective,
+                                                         @string.Length);
                         var sizeOfObscuredNewText = graphics.MeasureString(obscuredNewText,
                                                                            Font);
                         var point = GetPositionFromCharIndex(position);
@@ -203,11 +246,9 @@ namespace PasswordTextBoxControl
                                       (int)Math.Round(Math.Pow(Font.SizeInPoints, 0.05)));
 
                         graphics.FillRectangle(backBrush,
-                                               new RectangleF(point, sizeOfObscuredNewText));
-                        graphics.DrawString(text,
-                                            Font,
-                                            foreBrush,
-                                            point);
+                                               new RectangleF(point,
+                                                              sizeOfObscuredNewText));
+                        graphics.DrawString(@string, Font, foreBrush, point);
                     }
                 }
             }
@@ -219,11 +260,7 @@ namespace PasswordTextBoxControl
             {
                 Debug.Assert(ReferenceEquals(timer, null));
 
-                timer = new System.Timers.Timer(PasswordCharDelay)
-                {
-                    AutoReset = false,
-                    SynchronizingObject = this
-                };
+                timer = NewTimer(false, PasswordCharDelay, this);
                 timer.Elapsed += timer_Elapsed;
             }
             else
