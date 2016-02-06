@@ -6,7 +6,11 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("PasswordTextBox Control GUI Test")]
 [assembly: AssemblyDescription("GUI test of PasswordTextBox Control")]
-[assembly: AssemblyConfiguration("")]
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
 [assembly: AssemblyCompany("Nils Jonsson <passwordtextbox@nilsjonsson.com>")]
 [assembly: AssemblyProduct("PasswordTextBox Control GUI Test")]
 [assembly: AssemblyCopyright("Copyright © 2016 Nils Jonsson and PasswordTextBox Control contributors")]

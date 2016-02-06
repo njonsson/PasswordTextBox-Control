@@ -6,7 +6,11 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("PasswordTextBox Control")]
 [assembly: AssemblyDescription("A Windows Forms control that enables the user to enter password text, momentarily showing each character entered.")]
-[assembly: AssemblyConfiguration("")]
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
 [assembly: AssemblyCompany("Nils Jonsson <passwordtextbox@nilsjonsson.com>")]
 [assembly: AssemblyProduct("PasswordTextBox Control")]
 [assembly: AssemblyCopyright("Copyright © 2016 Nils Jonsson and PasswordTextBox Control contributors")]
