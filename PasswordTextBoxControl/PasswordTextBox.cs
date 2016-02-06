@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -185,6 +186,10 @@ namespace PasswordTextBoxControl
 
             using (var graphics = CreateGraphics())
             {
+                if (SystemInformation.IsFontSmoothingEnabled)
+                {
+                    graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+                }
                 using (var foreBrush = new SolidBrush(ForeColor))
                 {
                     using (var backBrush = new SolidBrush(BackColor))
@@ -194,6 +199,8 @@ namespace PasswordTextBoxControl
                         var sizeOfObscuredNewText = graphics.MeasureString(obscuredNewText,
                                                                            Font);
                         var point = GetPositionFromCharIndex(position);
+                        point.Offset(-(int)Math.Round(Math.Pow(Font.SizeInPoints, 0.15)),
+                                      (int)Math.Round(Math.Pow(Font.SizeInPoints, 0.05)));
 
                         graphics.FillRectangle(backBrush,
                                                new RectangleF(point, sizeOfObscuredNewText));
