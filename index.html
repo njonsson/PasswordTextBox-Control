@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>PasswordTextBox Control by njonsson</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">PasswordTextBox Control</h1>
+      <h2 class="project-tagline">A Windows Forms control that enables the user to enter password text, momentarily showing each character entered</h2>
+      <a href="https://github.com/njonsson/PasswordTextBox-Control" class="btn">View on GitHub</a>
+      <a href="https://github.com/njonsson/PasswordTextBox-Control/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/njonsson/PasswordTextBox-Control/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="passwordtextbox-control" class="anchor" href="#passwordtextbox-control" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><em>PasswordTextBox</em> Control</h1>
+
+<blockquote>
+<p>See what’s changed lately by reading the <a href="https://github.com/njonsson/PasswordTextBox-Control/blob/master/History.md" title="‘PasswordTextBox Control’ project history">project history</a>.</p>
+</blockquote>
+
+<p>It’s common knowledge that the
+<a href="https://msdn.microsoft.com/en-us/library/system.windows.forms.textbox.usesystempasswordchar.aspx" title="‘System​.Windows​.Forms​.TextBox​.UseSystemPasswordChar’ property in the .NET Framework Class Library"><em>UseSystemPasswordChar</em></a> and
+<a href="https://msdn.microsoft.com/en-us/library/system.windows.forms.textbox.passwordchar.aspx" title="‘System​.Windows​.Forms​.TextBox​.PasswordChar’ property in the .NET Framework Class Library"><em>PasswordChar</em></a> properties of the
+<em>System​.Windows​.Forms​.TextBox</em> control let you obscure user input of secret
+information such as passwords. But you may have wanted behavior such as
+touch-screen devices exhibit: user input is <strong>momentarily displayed before being
+replaced</strong> by a password character. <em>TextBox</em> can’t do that.</p>
+
+<p><em>PasswordTextBox</em> is what you were looking for.</p>
+
+<p><img src="https://raw.githubusercontent.com/njonsson/PasswordTextBox-Control/master/demo.gif" alt="PasswordTextBox control animated demonstration"></p>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>[x] Accept user input via the keyboard, the clipboard, and drag-and-drop</li>
+<li>[x] Prevent the user or system from copying control content to the clipboard if
+  a password character is in effect</li>
+<li>[x] Show input just once before replacing it with the password character, never
+  allowing any input to be revealed again after it has been obscured</li>
+<li>[x] Support the use of the system-defined password character</li>
+<li>[x] Support the use of a custom password character</li>
+<li>[x] Support the use of no password character at all (which makes the control
+  behave like a standard text box)</li>
+<li>[x] Support variable delay in connection with the password character</li>
+<li>[x] Observe system settings governing text quality (i.e., antialiasing)</li>
+<li>[x] Support user input via the keyboard by momentarily displaying each typed
+  character</li>
+<li>[ ] Support user input via the clipboard by momentarily displaying pasted
+  content</li>
+<li>[ ] Support user input via drag-and-drop by momentarily displaying dropped
+  content</li>
+</ul>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Use <em>PasswordTextBox</em> by adding <em>PasswordTextBoxControl.dll</em> as a reference
+within your Windows Forms project.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>See the <a href="https://github.com/njonsson/PasswordTextBox-Control/tree/master/PasswordTextBoxControl.Test.Gui" title="‘PasswordTextBox Control’ GUI test"><em>PasswordTextBox.Test.Gui</em> project</a> in this solution
+for a demonstration of the behavior of the control. Salient properties include:</p>
+
+<ul>
+<li><a href="#usesystempasswordchar-property"><em>UseSystemPasswordChar</em></a></li>
+<li><a href="#passwordchar-property"><em>PasswordChar</em></a></li>
+<li><a href="#passwordchardelay-property"><em>PasswordCharDelay</em></a></li>
+<li><a href="#text-property"><em>Text</em></a></li>
+</ul>
+
+<h3>
+<a id="usesystempasswordchar-property" class="anchor" href="#usesystempasswordchar-property" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><em>UseSystemPasswordChar</em> property</h3>
+
+<p>If <code>true</code>, this property makes user input appear as bullet characters after it
+momentarily appears normally. If <code>false</code>, then
+<a href="#passwordchar-property"><em>PasswordChar</em></a> takes effect.</p>
+
+<p>This property defaults to <code>true</code>.</p>
+
+<h3>
+<a id="passwordchar-property" class="anchor" href="#passwordchar-property" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><em>PasswordChar</em> property</h3>
+
+<p>This property makes user input appear as a specific character after it
+momentarily appears normally. The value of this property has no effect unless
+<a href="#usesystempasswordchar-property"><em>UseSystemPasswordChar</em></a> is <code>false</code>.</p>
+
+<p>This property defaults to <code>'\0'</code> (the null character), which makes the control
+behave like a standard text box if
+<a href="#usesystempasswordchar-property"><em>UseSystemPasswordChar</em></a> is <code>false</code>.</p>
+
+<h3>
+<a id="passwordchardelay-property" class="anchor" href="#passwordchardelay-property" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><em>PasswordCharDelay</em> property</h3>
+
+<p>This property controls the time in milliseconds during which user input appears
+normally before appearing as the password character.</p>
+
+<p>This property defaults to <em>1000</em> (i.e., one second).</p>
+
+<h3>
+<a id="text-property" class="anchor" href="#text-property" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><em>Text</em> property</h3>
+
+<p>As you might expect, this property stores user input regardless of any password
+character that may be in effect.</p>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>To submit a patch to the project:</p>
+
+<ol>
+<li>
+<a href="https://github.com/njonsson/PasswordTextBox-Control/fork" title="Fork the official repository of ‘PasswordTextBox Control’">Fork</a> the official repository.</li>
+<li>Create your feature branch: <code>git checkout -b my-new-feature</code>.</li>
+<li>Commit your changes: <code>git commit -am 'Add some feature'</code>.</li>
+<li>Push to the branch: <code>git push origin my-new-feature</code>.</li>
+<li>Make sure all tests in the project are still passing, and add test coverage
+of new behavior as appropriate.</li>
+<li>
+<a href="https://github.com/njonsson/PasswordTextBox-Control/compare" title="Compare branches of ‘PasswordTextBox Control’ repositories">Create</a> a new pull request.</li>
+</ol>
+
+<p>To release a new version:</p>
+
+<ol>
+<li>Update the project history in <a href="https://github.com/njonsson/PasswordTextBox-Control/blob/master/History.md" title="‘PasswordTextBox Control’ project history"><em>History.md</em></a>, and commit.</li>
+<li>Update the version numbers in all <em>AssemblyInfo.cs</em> files, and commit.</li>
+<li>Tag the commit and push commits and tags.</li>
+</ol>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p>Released under the <a href="https://github.com/njonsson/PasswordTextBox-Control/blob/master/License.md" title="MIT License claim for ‘PasswordTextBox Control’">MIT License</a>.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/njonsson/PasswordTextBox-Control">PasswordTextBox Control</a> is maintained by <a href="https://github.com/njonsson">njonsson</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
