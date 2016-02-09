@@ -3,6 +3,9 @@ using System.Windows.Forms;
 
 namespace PasswordTextBoxControl.Test.Gui
 {
+    /// <summary>
+    /// Provides the main entry point for the application.
+    /// </summary>
     public static class Program
     {
         /// <summary>
