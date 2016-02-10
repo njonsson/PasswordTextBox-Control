@@ -14,6 +14,9 @@ namespace PasswordTextBoxControl
 {
     [DefaultProperty("PasswordCharDelay")]
     [Description("Enables the user to enter password input, momentarily showing each character entered.")]
+    [ToolboxBitmap(typeof(PasswordTextBox), "toolbox.bmp")]
+    [ToolboxItem(true)]
+    [ToolboxItemFilter("Common Controls")]
     public class PasswordTextBox : TextBox
     {
         [EditorBrowsable(EditorBrowsableState.Never)]
