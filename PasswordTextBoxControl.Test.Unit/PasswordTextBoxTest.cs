@@ -26,16 +26,16 @@ namespace PasswordTextBoxControl.Test.Unit
         protected PasswordTextBox PasswordTextBox;
 
         protected Func<Control, IGraphics> OriginalGraphicsConstructor;
-        protected List<Control>      CallsToNewGraphics;
-        protected List<MockGraphics> GraphicsObjects;
+        protected List<Control>            CallsToNewGraphics;
+        protected List<MockGraphics>       GraphicsObjects;
 
         protected Func<Color, ISolidBrush> OriginalSolidBrushConstructor;
-        protected List<Color>          CallsToNewSolidBrush;
-        protected List<MockSolidBrush> SolidBrushes;
+        protected List<Color>              CallsToNewSolidBrush;
+        protected List<MockSolidBrush>     SolidBrushes;
 
         protected Func<bool, double, ISynchronizeInvoke, ITimer> OriginalTimerConstructor;
-        protected List<CallToInjectTimer> CallsToNewTimer;
-        protected List<MockTimer>         Timers;
+        protected List<CallToInjectTimer>                        CallsToNewTimer;
+        protected List<MockTimer>                                Timers;
 
         [TestInitialize]
         public void TestInitialize()
