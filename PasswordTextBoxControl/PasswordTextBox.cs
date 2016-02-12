@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Timers;
 using System.Windows.Forms;
+using PasswordTextBoxControl.ComponentModel;
 using PasswordTextBoxControl.Facades;
 using Graphics = PasswordTextBoxControl.Facades.Graphics;
 using SolidBrush = PasswordTextBoxControl.Facades.SolidBrush;
@@ -62,6 +63,40 @@ namespace PasswordTextBoxControl
             SetUpTimer(true);
         }
 
+        /// <summary>
+        /// Occurs before the <see cref="PasswordChar"/> property value changes.
+        /// </summary>
+        public event EventHandler<CancelChangeEventArgs<char>> PasswordCharChanging;
+
+        /// <summary>
+        /// Occurs when the <see cref="PasswordChar"/> property value changes.
+        /// </summary>
+        public event EventHandler<ChangeEventArgs<char>> PasswordCharChanged;
+
+        /// <summary>
+        /// Occurs before the <see cref="PasswordCharDelay"/> property value
+        /// changes.
+        /// </summary>
+        public event EventHandler<CancelChangeEventArgs<int>> PasswordCharDelayChanging;
+
+        /// <summary>
+        /// Occurs when the <see cref="PasswordCharDelay"/> property value
+        /// changes.
+        /// </summary>
+        public event EventHandler<ChangeEventArgs<int>> PasswordCharDelayChanged;
+
+        /// <summary>
+        /// Occurs before the <see cref="UseSystemPasswordChar"/> property value
+        /// changes.
+        /// </summary>
+        public event EventHandler<CancelChangeEventArgs<bool>> UseSystemPasswordCharChanging;
+
+        /// <summary>
+        /// Occurs when the <see cref="UseSystemPasswordChar"/> property value
+        /// changes.
+        /// </summary>
+        public event EventHandler<ChangeEventArgs<bool>> UseSystemPasswordCharChanged;
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool Multiline {
@@ -89,7 +124,28 @@ namespace PasswordTextBoxControl
         {
             get { return passwordChar; }
 
-            set { passwordChar = base.PasswordChar = value; }
+            set
+            {
+                if ((passwordChar == value) && (base.PasswordChar == value))
+                {
+                    return;
+                }
+
+                var eventArgs = CancelChangeEventArgs<char>.DoIf(this,
+                                                                 PasswordCharChanging,
+                                                                 OnPasswordCharChanging,
+                                                                 PasswordChar,
+                                                                 value);
+                if (eventArgs?.Cancel == true) return;
+
+                var oldValue = PasswordChar;
+                passwordChar = base.PasswordChar = value;
+                ChangeEventArgs<char>.DoIf(this,
+                                           PasswordCharChanged,
+                                           OnPasswordCharChanged,
+                                           oldValue,
+                                           PasswordChar);
+            }
         }
 
         /// <summary>
@@ -117,6 +173,18 @@ namespace PasswordTextBoxControl
                     return;
                 }
 
+                if ((passwordCharDelay == value) && ((int)t.Interval == value))
+                {
+                    return;
+                }
+
+                var eventArgs = CancelChangeEventArgs<int>.DoIf(this,
+                                                                PasswordCharDelayChanging,
+                                                                OnPasswordCharDelayChanging,
+                                                                PasswordCharDelay,
+                                                                value);
+                if (eventArgs?.Cancel == true) return;
+
                 try
                 {
                     t.Interval = value;
@@ -127,7 +195,14 @@ namespace PasswordTextBoxControl
                                                           value,
                                                           "Must be greater than zero.");
                 }
+
+                var oldValue = PasswordCharDelay;
                 passwordCharDelay = value;
+                ChangeEventArgs<int>.DoIf(this,
+                                          PasswordCharDelayChanged,
+                                          OnPasswordCharDelayChanged,
+                                          oldValue,
+                                          PasswordCharDelay);
             }
         }
 
@@ -158,7 +233,25 @@ namespace PasswordTextBoxControl
         {
             get { return base.UseSystemPasswordChar; }
 
-            set { base.UseSystemPasswordChar = value; }
+            set
+            {
+                if (base.UseSystemPasswordChar == value) return;
+
+                var eventArgs = CancelChangeEventArgs<bool>.DoIf(this,
+                                                                 UseSystemPasswordCharChanging,
+                                                                 OnUseSystemPasswordCharChanging,
+                                                                 UseSystemPasswordChar,
+                                                                 value);
+                if (eventArgs?.Cancel == true) return;
+
+                var oldValue = UseSystemPasswordChar;
+                base.UseSystemPasswordChar = value;
+                ChangeEventArgs<bool>.DoIf(this,
+                                           UseSystemPasswordCharChanged,
+                                           OnUseSystemPasswordCharChanged,
+                                           oldValue,
+                                           UseSystemPasswordChar);
+            }
         }
 
         /// <summary>
@@ -174,6 +267,92 @@ namespace PasswordTextBoxControl
             }
 
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="PasswordCharChanged"/> event with the
+        /// specified <see cref="ChangeEventArgs{T}"/> of <see cref="char"/>.
+        /// </summary>
+        /// <param name="e">A <see cref="ChangeEventArgs{T}"/> of
+        /// <see cref="char"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="e"/> is
+        /// <c>null</c>.</exception>>
+        protected virtual void OnPasswordCharChanged(ChangeEventArgs<char> e)
+        {
+            if (ReferenceEquals(e, null))
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
+            if (!ReferenceEquals(PasswordCharChanged, null))
+            {
+                PasswordCharChanged(this, e);
+            }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="PasswordCharChanging"/> event with the
+        /// specified <see cref="CancelChangeEventArgs{T}"/> of
+        /// <see cref="char"/>.
+        /// </summary>
+        /// <param name="e">A <see cref="CancelChangeEventArgs{T}"/> of
+        /// <see cref="char"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="e"/> is
+        /// <c>null</c>.</exception>>
+        protected virtual void OnPasswordCharChanging(CancelChangeEventArgs<char> e)
+        {
+            if (ReferenceEquals(e, null))
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
+            if (!ReferenceEquals(PasswordCharChanging, null))
+            {
+                PasswordCharChanging(this, e);
+            }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="PasswordCharDelayChanged"/> event with the
+        /// specified <see cref="ChangeEventArgs{T}"/> of <see cref="int"/>.
+        /// </summary>
+        /// <param name="e">A <see cref="ChangeEventArgs{T}"/> of
+        /// <see cref="int"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="e"/> is
+        /// <c>null</c>.</exception>>
+        protected virtual void OnPasswordCharDelayChanged(ChangeEventArgs<int> e)
+        {
+            if (ReferenceEquals(e, null))
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
+            if (!ReferenceEquals(PasswordCharDelayChanged, null))
+            {
+                PasswordCharDelayChanged(this, e);
+            }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="PasswordCharDelayChanging"/> event with the
+        /// specified <see cref="CancelChangeEventArgs{T}"/> of
+        /// <see cref="int"/>.
+        /// </summary>
+        /// <param name="e">A <see cref="CancelChangeEventArgs{T}"/> of
+        /// <see cref="int"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="e"/> is
+        /// <c>null</c>.</exception>>
+        protected virtual void OnPasswordCharDelayChanging(CancelChangeEventArgs<int> e)
+        {
+            if (ReferenceEquals(e, null))
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
+            if (!ReferenceEquals(PasswordCharDelayChanging, null))
+            {
+                PasswordCharDelayChanging(this, e);
+            }
         }
 
         /// <summary>
@@ -204,6 +383,49 @@ namespace PasswordTextBoxControl
             textPrevious = text;
 
             base.OnTextChanged(e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="UseSystemPasswordCharChanged"/> event with the
+        /// specified <see cref="ChangeEventArgs{T}"/> of <see cref="bool"/>.
+        /// </summary>
+        /// <param name="e">A <see cref="ChangeEventArgs{T}"/> of
+        /// <see cref="bool"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="e"/> is
+        /// <c>null</c>.</exception>>
+        protected virtual void OnUseSystemPasswordCharChanged(ChangeEventArgs<bool> e)
+        {
+            if (ReferenceEquals(e, null))
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
+            if (!ReferenceEquals(UseSystemPasswordCharChanged, null))
+            {
+                UseSystemPasswordCharChanged(this, e);
+            }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="UseSystemPasswordCharChanging"/> event with
+        /// the specified <see cref="CancelChangeEventArgs{T}"/> of
+        /// <see cref="bool"/>.
+        /// </summary>
+        /// <param name="e">A <see cref="CancelChangeEventArgs{T}"/> of
+        /// <see cref="bool"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="e"/> is
+        /// <c>null</c>.</exception>>
+        protected virtual void OnUseSystemPasswordCharChanging(CancelChangeEventArgs<bool> e)
+        {
+            if (ReferenceEquals(e, null))
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
+            if (!ReferenceEquals(UseSystemPasswordCharChanging, null))
+            {
+                UseSystemPasswordCharChanging(this, e);
+            }
         }
 
         /// <summary>
