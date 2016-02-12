@@ -22,6 +22,8 @@
       <h1>
 <a id="passwordtextbox-control" class="anchor" href="#passwordtextbox-control" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><em>PasswordTextBox</em> Control</h1>
 
+<p><a href="https://www.nuget.org/packages/PasswordTextBox-Control/" title="‘PasswordTextBox-Control’ NuGet package"><img src="https://img.shields.io/nuget/v/PasswordTextBox-Control.svg" alt="‘PasswordTextBox-Control’ NuGet package"></a></p>
+
 <blockquote>
 <p>See what’s changed lately by reading the <a href="https://github.com/njonsson/PasswordTextBox-Control/blob/master/History.md" title="‘PasswordTextBox Control’ project history">project history</a>.</p>
 </blockquote>
@@ -41,31 +43,40 @@ replaced</strong> by a password character. <em>TextBox</em> can’t do that.</p>
 <h2>
 <a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
 
-<ul>
-<li>[x] Accept user input via the keyboard, the clipboard, and drag-and-drop</li>
-<li>[x] Prevent the user or system from copying control content to the clipboard if
-  a password character is in effect</li>
-<li>[x] Show input just once before replacing it with the password character, never
-  allowing any input to be revealed again after it has been obscured</li>
-<li>[x] Support the use of the system-defined password character</li>
-<li>[x] Support the use of a custom password character</li>
-<li>[x] Support the use of no password character at all (which makes the control
-  behave like a standard text box)</li>
-<li>[x] Support variable delay in connection with the password character</li>
-<li>[x] Observe system settings governing text quality (i.e., antialiasing)</li>
-<li>[x] Support user input via the keyboard by momentarily displaying each typed
-  character</li>
-<li>[ ] Support user input via the clipboard by momentarily displaying pasted
-  content</li>
-<li>[ ] Support user input via drag-and-drop by momentarily displaying dropped
-  content</li>
-</ul>
+<p>☑︎ Accept user input via the keyboard, the clipboard, and drag-and-drop<br>
+☑︎ Prevent the user or system from copying control content to the clipboard if a password character is in effect<br>
+☑︎ Show input just once before replacing it with the password character, never allowing any input to be revealed again after it has been obscured<br>
+☑︎ Support the use of the system-defined password character<br>
+☑︎ Support the use of a custom password character<br>
+☑︎ Support the use of no password character at all (which makes the control behave like a standard text box)<br>
+☑︎ Support variable delay in connection with the password character<br>
+☑︎ Observe system settings governing text quality (i.e., antialiasing)<br>
+☑︎ Support user input via the keyboard by momentarily displaying each typed character<br>
+☐ Support user input via the clipboard by momentarily displaying pasted content<br>
+☐ Support user input via drag-and-drop by momentarily displaying dropped content</p>
 
 <h2>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>Use <em>PasswordTextBox</em> by adding <em>PasswordTextBoxControl.dll</em> as a reference
-within your Windows Forms project.</p>
+<p>Install <a href="https://www.nuget.org/packages/PasswordTextBox-Control/" title="‘PasswordTextBox-Control’ NuGet package">the NuGet package</a>. You can do this using the Visual
+Studio NuGet plugin, or from the command line in your project folder:
+<code>nuget install PasswordTextBox-Control</code>.</p>
+
+<p>Using the Visual Studio Windows Forms Designer is optional, and configuring it
+requires some manual steps. Once <em>PasswordTextBoxControl.dll</em> is a reference of
+your project, you need to add the control to the Visual Studio Toolbox so it can
+be dropped on forms in the designer:</p>
+
+<ol>
+<li>Click <strong>Choose Toolbox Items…</strong> in the <strong>Tools</strong> menu.</li>
+<li>On the <strong>.NET Framework Components tab</strong> of the <strong>Choose Toolbox Items</strong>
+dialog box, click the <strong>Browse…</strong> button.</li>
+<li>Navigate to the <em>packages</em> folder of your project, and within that
+find the <em>PasswordTextBoxControl.dll</em> version that corresponds to the .NET
+Framework version you’re using.</li>
+<li>Click <strong>OK</strong> to save the changes to the toolbox.</li>
+<li>Look for <em>PasswordTextBox</em> among <em>Common Controls</em> in the toolbox.</li>
+</ol>
 
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
@@ -135,7 +146,11 @@ of new behavior as appropriate.</li>
 
 <ol>
 <li>Update the project history in <a href="https://github.com/njonsson/PasswordTextBox-Control/blob/master/History.md" title="‘PasswordTextBox Control’ project history"><em>History.md</em></a>, and commit.</li>
-<li>Update the version numbers in all <em>AssemblyInfo.cs</em> files, and commit.</li>
+<li>Update the version numbers in the <em>PasswordTextBox-Control.nuspec</em> file and in
+all <em>AssemblyInfo.cs</em> files, and commit.</li>
+<li>Build the NuGet package: <code>nuget pack PasswordTextBox-Control.nuspec</code>.</li>
+<li>Publish the NuGet package: <code>nuget push PasswordTextBox-Control.X.Y.Z.nupkg</code>
+where <code>X.Y.Z</code> is the version you just built.</li>
 <li>Tag the commit and push commits and tags.</li>
 </ol>
 
