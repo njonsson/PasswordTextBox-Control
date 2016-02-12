@@ -2,7 +2,7 @@
 
 ## <a name="v0.3.0"></a>v0.3.0, Thu 2/11/2016
 
-* Implement _*Changed_ and _*Changing_ events for _*PasswordChar*_ properties
+* Implement _*Changed_ and _*Changing_ events for _\*PasswordChar\*_ properties
 * Fix the transparency of the toolbox bitmap
 
 ## <a name="v0.2.0"></a>v0.2.0, Tue 2/09/2016
