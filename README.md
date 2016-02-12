@@ -1,5 +1,7 @@
 # _PasswordTextBox_ Control
 
+[![‘PasswordTextBox-Control’ NuGet package]][NuGet-package]
+
 > See what’s changed lately by reading the [project history][project-history].
 
 It’s common knowledge that the
@@ -36,8 +38,23 @@ _PasswordTextBox_ is what you were looking for.
 
 ## Installation
 
-Use _PasswordTextBox_ by adding _PasswordTextBoxControl.dll_ as a reference
-within your Windows Forms project.
+Install [the NuGet package][NuGet-package]. You can do this using the Visual
+Studio NuGet plugin, or from the command line in your project folder:
+`nuget install PasswordTextBox-Control`.
+
+Using the Visual Studio Windows Forms Designer is optional, and configuring it
+requires some manual steps. Once _PasswordTextBoxControl.dll_ is a reference of
+your project, you need to add the control to the Visual Studio Toolbox so it can
+be dropped on forms in the designer:
+
+1. Click **Choose Toolbox Items…** in the **Tools** menu.
+2. On the **.NET Framework Components tab** of the **Choose Toolbox Items**
+   dialog box, click the **Browse…** button.
+3. Navigate to the _packages_ folder of your project, and within that
+   find the _PasswordTextBoxControl.dll_ version that corresponds to the .NET
+   Framework version you’re using.
+4. Click **OK** to save the changes to the toolbox.
+5. Look for _PasswordTextBox_ among _Common Controls_ in the toolbox.
 
 ## Usage
 
@@ -95,18 +112,24 @@ To submit a patch to the project:
 To release a new version:
 
 1. Update the project history in [_History.md_][project-history], and commit.
-2. Update the version numbers in all _AssemblyInfo.cs_ files, and commit.
-3. Tag the commit and push commits and tags.
+2. Update the version numbers in the _PasswordTextBox-Control.nuspec_ file and in
+   all _AssemblyInfo.cs_ files, and commit.
+3. Build the NuGet package: `nuget pack PasswordTextBox-Control.nuspec`.
+4. Publish the NuGet package: `nuget push PasswordTextBox-Control.X.Y.Z.nupkg`
+   where `X.Y.Z` is the version you just built.
+5. Tag the commit and push commits and tags.
 
 ## License
 
 Released under the [MIT License][MIT-License].
 
+[‘PasswordTextBox-Control’ NuGet package]:        https://img.shields.io/nuget/v/PasswordTextBox-Control.svg
 [PasswordTextBox control animated demonstration]: https://raw.githubusercontent.com/njonsson/PasswordTextBox-Control/master/demo.gif
 
 [project-history]:                         https://github.com/njonsson/PasswordTextBox-Control/blob/master/History.md                       "‘PasswordTextBox Control’ project history"
 [WinForms-UseSystemPasswordChar-property]: https://msdn.microsoft.com/en-us/library/system.windows.forms.textbox.usesystempasswordchar.aspx "‘System​.Windows​.Forms​.TextBox​.UseSystemPasswordChar’ property in the .NET Framework Class Library"
 [WinForms-PasswordChar-property]:          https://msdn.microsoft.com/en-us/library/system.windows.forms.textbox.passwordchar.aspx          "‘System​.Windows​.Forms​.TextBox​.PasswordChar’ property in the .NET Framework Class Library"
+[NuGet-package]:                           https://www.nuget.org/packages/PasswordTextBox-Control/                                          "‘PasswordTextBox-Control’ NuGet package"
 [project-GUI-test]:                        https://github.com/njonsson/PasswordTextBox-Control/tree/master/PasswordTextBoxControl.Test.Gui "‘PasswordTextBox Control’ GUI test"
 [fork-project]:                            https://github.com/njonsson/PasswordTextBox-Control/fork                                         "Fork the official repository of ‘PasswordTextBox Control’"
 [compare-project-branches]:                https://github.com/njonsson/PasswordTextBox-Control/compare                                      "Compare branches of ‘PasswordTextBox Control’ repositories"
