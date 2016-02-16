@@ -230,4 +230,4 @@ _Pvt_Extensions
 .fake/
 
 # NuGet package binaries
-lib/*
+NuGet-package/lib/*
