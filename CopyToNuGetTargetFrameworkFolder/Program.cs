@@ -85,7 +85,6 @@ namespace CopyToNuGetTargetFrameworkFolder
             }
             else
             {
-                Console.WriteLine(targetFrameworkAttribute.FrameworkName);
                 frameworkName = new FrameworkName(targetFrameworkAttribute.FrameworkName);
             }
             var identifier = NuGetFrameworkIdentifier(frameworkName);
