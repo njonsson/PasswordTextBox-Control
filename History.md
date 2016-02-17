@@ -1,5 +1,9 @@
 # Version history for the _PasswordTextBox Control_ project
 
+## <a name="v0.4.0"></a>v0.4.0, Tue 2/16/2016
+
+* Repackage for all available .NET Framework versions
+
 ## <a name="v0.3.0"></a>v0.3.0, Thu 2/11/2016
 
 * Implement _*Changed_ and _*Changing_ events for _\*PasswordChar\*_ properties
